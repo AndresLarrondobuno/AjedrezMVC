@@ -1,0 +1,179 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+
+{% block contenido_principal %}
+
+<div id="datosPartida" data-id="{{ id }}" data-rol-usuario="{{ rol_usuario }}" data-rol-oponente="{{ rol_oponente }}"
+    hidden></div>
+
+<div class="contenedorImagenesDePiezasNegras" hidden>
+    <img src="{% static 'imagenes/rey_negro.png' %}" id="imagenReyNegro" class="imagenPieza">
+    <img src="{% static 'imagenes/reina_negro.png' %}" id="imagenReinaNegro" class="imagenPieza">
+    <img src="{% static 'imagenes/caballo_negro.png' %}" id="imagenCaballoNegro" class="imagenPieza">
+    <img src="{% static 'imagenes/alfil_negro.png' %}" id="imagenAlfilNegro" class="imagenPieza">
+    <img src="{% static 'imagenes/torre_negro.png' %}" id="imagenTorreNegro" class="imagenPieza">
+    <img src="{% static 'imagenes/peon_negro.png' %}" id="imagenPeonNegro" class="imagenPeon">
+</div>
+
+<div class="contenedorImagenesDePiezasBlancas" hidden>
+    <img src="{% static 'imagenes/rey_blanco.png' %}" id="imagenReyBlanco" class="imagenPieza">
+    <img src="{% static 'imagenes/reina_blanco.png' %}" id="imagenReinaBlanco" class="imagenPieza">
+    <img src="{% static 'imagenes/caballo_blanco.png' %}" id="imagenCaballoBlanco" class="imagenPieza">
+    <img src="{% static 'imagenes/alfil_blanco.png' %}" id="imagenAlfilBlanco" class="imagenPieza">
+    <img src="{% static 'imagenes/torre_blanco.png' %}" id="imagenTorreBlanco" class="imagenPieza">
+    <img src="{% static 'imagenes/peon_blanco.png' %}" id="imagenPeonBlanco" class="imagenPeon">
+</div>
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-6 offset-2 casilla overlayTablero">
+            
+            <div class="container tablero">
+
+                <div id="fila8" class="row">
+                    <div class="col casilla"><text>8</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="fila7" class="row">
+                    <div class="col casilla"><text>7</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="fila6" class="row">
+                    <div class="col casilla"><text>6</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="fila5" class="row">
+                    <div class="col casilla"><text>5</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="fila4" class="row">
+                    <div class="col casilla"><text>4</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="fila3" class="row">
+                    <div class="col casilla"><text>3</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="fila2" class="row">
+                    <div class="col casilla"><text>2</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="fila1" class="row">
+                    <div class="col casilla"><text>1</text></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                    <div class="col casilla"></div>
+                </div>
+                <div id="filaNomenclatura" class="row" style="position: relative;">
+                    <div class="col casilla"></div>
+                    <div class="col casilla">1</text></div>
+                    <div class="col casilla">2</text></div>
+                    <div class="col casilla">3</text></div>
+                    <div class="col casilla">4</text></div>
+                    <div class="col casilla">5</text></div>
+                    <div class="col casilla">6</text></div>
+                    <div class="col casilla">7</text></div>
+                    <div class="col casilla">8</text></div>
+                                    
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="col-3 contenedorChat" id="contenedorChat">
+
+            <div class="contenedorAnchoMediano">
+
+                <h3 class="text center">Chat</h3>
+
+            </div>
+
+
+            <div id="contenedorMensajes"></div>
+
+            <br>
+            <form class="enviarMensaje" data-username="{{ nombre_usuario_actual }}"
+                id="formularioParaEnviarMensajeAServidor">
+
+                <input type="text" name="contenido">
+
+            </form>
+
+
+            <div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+    <script type="module" src="{% static 'js/conexionwebsocket/administradorDeMensajesWebsocket.js' %}"></script>
+    <script type="module" src="{% static 'js/conexionwebsocket/administradorDeConexionWebsocket.js' %}"></script>
+    <script type="module" src="{% static 'js/tablero.js' %}"></script>
+    <script type="module" src="{% static 'js/main.js' %}"></script>
+
+    {% endblock %}

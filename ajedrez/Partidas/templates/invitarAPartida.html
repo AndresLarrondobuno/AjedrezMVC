@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block contenido_principal %}
+
+    <div class="contenedorAnchoMediano fondo1 round">
+
+        <form id="formularioBuscarOponente" method="post">
+
+            {% csrf_token %}
+            
+            <input id="nombreOponente" type="text" placeholder="Nombre de Usuario">
+            <select id="opcionesUsuarios"></select>
+            <button id="invitacionAPartida" type="submit">Invitar a Partida</button>
+
+        </form>
+
+    </div>
+
+    <script type="module" src="{% static 'js/invitarAPartida.js' %}"></script>
+
+{% endblock %}

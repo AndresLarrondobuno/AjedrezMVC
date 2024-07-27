@@ -1,0 +1,49 @@
+body {
+    background-color: rgba(128, 128, 128);
+    background-repeat: no-repeat;
+}
+
+.overlayTablero {
+    background-color: rgb(97, 97, 97);
+}
+
+.tablero {
+    min-width: 100%;
+    min-height: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.casillaOscura {
+    background-color: rgb(165, 42, 42);
+}
+
+.casillaClara {
+    background-color: rgb(233, 168, 168);
+}
+
+.casillaResaltada {
+    border: greenyellow solid 1px;
+}
+
+.casilla {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1%;
+    aspect-ratio: 1 / 1;
+}
+
+.imagenPeon, .imagenPieza {
+    max-width: 90%;
+    max-height: 90%;
+    margin: 5% 5% 5% 5%;
+}
+
+.contenedorChat {
+    padding: 1%;
+    background-color: #ece4e4ce;
+    overflow-y: auto;
+    /* Para permitir el desplazamiento vertical si el contenido es más largo que el contenedor */
+    border: 1px solid;
+    border-radius: 15px;
+}

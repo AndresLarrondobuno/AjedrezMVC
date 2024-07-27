@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+
+
+{% block contenido_principal %}
+
+    <div class="contenedor">
+        <h2>Registra tu usuario</h2>
+    </div>
+
+    <div class="contenedorAnchoMediano fondo2">
+
+        <form method="post" action="{% url 'Usuarios:registrar_usuario' %}">
+            {% csrf_token %}
+            {{ formulario.as_p }}
+            <input type="submit"  value="Crear Usuario">
+        </form>
+
+    </div>
+
+{% endblock %}

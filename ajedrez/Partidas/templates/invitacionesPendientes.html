@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block contenido_principal %}
+
+    <div>
+        <h3>Invitaciones pendientes</h3>
+    </div>
+
+    <div>
+
+        {% for invitacion in invitacionesPendientes.all %}
+            <div class="contenedorInvitacion" data-invitacion-id="{{ invitacion.id }}">
+
+                <p>{{ invitacion }}</p>
+                
+            </div>
+        {% empty %}
+
+            <h3>No tenés invitaciones pendientes. Anda a jugar al parque, gil.</h3>
+
+        {% endfor %}
+
+    </div>
+
+    <script type="module" src="{% static 'js/aceptarInvitacion.js' %}"></script>
+
+
+{% endblock %}

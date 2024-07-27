@@ -1,0 +1,17 @@
+Creo tablero para alamacenar casillas
+Creo casillas dentro del tablero
+-Asigno piezas a las casillas en su posicion inicial
+
+
+
+
+
+Creo listeners para casillas con piezas
+Si se clickea una casilla con pieza, aviso a servidor para que almacene la decision
+
+*SE CLICKEA UNA PIEZA*
+-flagear pieza.seleccionada = true
+resaltar casilla que contiene a la pieza
+anular los listeners de contenedores de casillas que supondrian un movimiento ilegal (autojaque/atacaPiezaPropia/noRespetaPatronDeMovimiento)
+activar los listeners de contenedores de casillas que supondrian un movimiento legal
+tener en cuenta que necesito un listener nuevo para el contenedor de la casilla clickeada, para poder quitar la seleccion de la pieza
