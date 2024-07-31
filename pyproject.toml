@@ -6,9 +6,10 @@ authors = ["AndresLarrondobuno <andreslarrondobuno@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
-django = "^5.0.7"
-django-channels = "^0.7.0"
+python = "^3.9"
+django = "^4.2.5"
+channels = "4.0.0"
+daphne = "^4.1.2"
 
 
 [build-system]

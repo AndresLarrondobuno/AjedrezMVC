@@ -1,4 +1,5 @@
 import { obtenerIdDePartida, obtenerRolDePartidaDeUsuario } from "../../../static/js/funcionesAuxiliares.js";
+import { AdministradorDeElementosHTML } from "./administradorDeElementosHTML.js";
 
 class Partida {
     constructor(jugadorSolicitante, jugadorDestinatario) {
@@ -38,6 +39,34 @@ class Partida {
         else {
             return this.jugadores["jugadorSolicitante"]
         }
+    }
+
+
+    obtenerJugadorEnTurnoActivo() {
+        if (this.jugadores['jugadorSolicitante'].turnoActivo) {
+            return this.jugadores['jugadorSolicitante']
+        }
+        else {
+            return this.jugadores['jugadorDestinatario']
+        }
+    }
+
+
+    obtenerJugadorPorColor(color) {
+        if (this.jugadores['jugadorSolicitante'].color === color)  {
+            return this.jugadores['jugadorSolicitante']
+        }
+        else {
+            return this.jugadores['jugadorDestinatario']
+        }
+    }
+
+
+    empezarTurnoDeJugador(color) {
+        let jugador = this.obtenerJugadorPorColor(color);
+        jugador.turnoActivo = true;
+        this.obtenerOponente(jugador).turnoActivo = false;
+        AdministradorDeElementosHTML.agregarListenersParaComunicarSeleccionDePiezaACasillasOcupadas(jugador);
     }
 
 }

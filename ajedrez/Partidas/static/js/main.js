@@ -5,8 +5,6 @@ import { AdministradorDeElementosHTML } from "./administradorDeElementosHTML.js"
 import { AdministradorDeInterfazDeTablero } from "./administradorDeInterfazDeTablero.js";
 
 let tablero = new Tablero();
-let contenedorFila = document.getElementById(`fila${8}`);
-console.log("--->", contenedorFila.children);
 
 let jugadorSolicitante = new Jugador('solicitante', 'blanco', tablero); //color hardcodeado para testear, el formulario de creacion 
 
@@ -22,5 +20,6 @@ administradorDeInterfazDeTablero.asignarColorAContenedoresDeCasillas();
 
 administradorDeInterfazDeTablero.asignarImagenesDePiezasACasillas();
 
+partida.empezarTurnoDeJugador('blanco');
 
 export { partida };

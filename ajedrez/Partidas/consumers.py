@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 class PartidasConsumer(AsyncWebsocketConsumer):
+    jugadas = {}
+    
     async def connect(self):
         room_id = self.scope['url_route']['kwargs']['id']
         username = str(self.scope['user'])
@@ -45,7 +47,7 @@ class PartidasConsumer(AsyncWebsocketConsumer):
             'message': mensaje,
         }
 
-        if tipo == 'mensajeDeUsuario':
+        if tipo == 'mensaje_de_usuario':
             username = datos_deserializados['username']
             contexto['username'] = username
             
@@ -53,20 +55,34 @@ class PartidasConsumer(AsyncWebsocketConsumer):
     
     
     #(3) maneja mensajes con type "mensajeDeUsuario"
-    async def mensajeDeUsuario(self, contexto):
+    async def mensaje_de_usuario(self, contexto):
         mensaje = contexto['message']
         username_emisor = contexto['username']
 
-        print(f"metodo mensajeDeUsuario ejecutado: {mensaje} / consumidor asociado a: {self.scope['user']}")
+        print(f"metodo mensaje_de_usuario ejecutado: {mensaje} / consumidor asociado a: {self.scope['user']}")
         
         mensajeMarcado = f'{username_emisor}: {mensaje}'
         json_contexto_actualizado = json.dumps({
-            "type": "mensajeDeUsuario",
+            "type": "mensaje_de_usuario",
             "message": mensajeMarcado,
             "username": username_emisor,
         })
 
         await self.send(text_data=json_contexto_actualizado)
+    
+    
+    async def actualizacion_de_estado_de_partida(self, contexto):
+        jugada = contexto['message']['jugada']
+        print(f"metodo actualizacion_de_estado_de_partida ejecutado, consumidor asociado a: {self.scope['user']}")
+
+        json_contexto = json.dumps({
+            'message': jugada,
+            'type':'actualizacion_de_estado_de_partida',
+        })
+
+        await self.send(text_data=json_contexto)
+        
+        
     
     
     
