@@ -71,13 +71,19 @@ class PartidasConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json_contexto_actualizado)
     
     
-    async def actualizacion_de_estado_de_partida(self, contexto):
+    async def validacion_de_jugada(self, contexto):
         jugada = contexto['message']['jugada']
-        print(f"metodo actualizacion_de_estado_de_partida ejecutado, consumidor asociado a: {self.scope['user']}")
+        color = contexto['message']['color']
+        rolUsuario = contexto['message']['rolUsuario']
+        print(f"metodo validacion_de_jugada ejecutado, consumidor asociado a: {self.scope['user']}")
 
         json_contexto = json.dumps({
-            'message': jugada,
-            'type':'actualizacion_de_estado_de_partida',
+            'message': {
+                "jugada": jugada,
+                "rolUsuario": rolUsuario,
+                "color": color,
+                },
+            'type':'validacion_de_jugada',
         })
 
         await self.send(text_data=json_contexto)

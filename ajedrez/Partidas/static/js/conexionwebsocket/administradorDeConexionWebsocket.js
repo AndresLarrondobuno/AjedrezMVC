@@ -15,7 +15,6 @@ class AdministradorDeConexionWebsocket {
     iniciarConexionWebsocket() {
         let idPartida = obtenerIdDePartida();
         let url = `ws://${window.location.host}/ws/partidas/partida_${idPartida}/`;
-        console.log("URL WS:", url);
 
         let websocket = new WebSocket(url);
         return websocket

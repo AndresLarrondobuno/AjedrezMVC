@@ -1,12 +1,15 @@
 {% extends 'index.html' %}
 
+
 {% load static %}
 
 
 {% block contenido_principal %}
 
 <div id="datosPartida" data-id="{{ id }}" data-rol-usuario="{{ rol_usuario }}" data-rol-oponente="{{ rol_oponente }}"
-    hidden></div>
+    data-usuario-color-blanco="{{ usuario_color_blanco }}" data-usuario-color-negro="{{ usuario_color_negro }}" 
+    data-color-usuario-actual= "{{ color_usuario_actual }}" hidden>
+</div>
 
 <div class="contenedorImagenesDePiezasNegras" hidden>
     <img src="{% static 'imagenes/rey_negro.png' %}" id="imagenReyNegro" class="imagenPieza">
@@ -31,7 +34,7 @@
     <div class="row">
 
         <div class="col-6 offset-2 casilla overlayTablero">
-            
+
             <div class="container tablero">
 
                 <div id="fila8" class="row">
@@ -132,7 +135,7 @@
                     <div class="col casilla">6</text></div>
                     <div class="col casilla">7</text></div>
                     <div class="col casilla">8</text></div>
-                                    
+
                 </div>
 
             </div>
@@ -160,9 +163,7 @@
             </form>
 
 
-            <div>
 
-            </div>
 
         </div>
     </div>
@@ -171,9 +172,9 @@
 </div>
 
 
-    <script type="module" src="{% static 'js/conexionwebsocket/administradorDeMensajesWebsocket.js' %}"></script>
-    <script type="module" src="{% static 'js/conexionwebsocket/administradorDeConexionWebsocket.js' %}"></script>
-    <script type="module" src="{% static 'js/tablero.js' %}"></script>
-    <script type="module" src="{% static 'js/main.js' %}"></script>
+<script type="module" src="{% static 'js/conexionwebsocket/administradorDeMensajesWebsocket.js' %}"></script>
+<script type="module" src="{% static 'js/conexionwebsocket/administradorDeConexionWebsocket.js' %}"></script>
+<script type="module" src="{% static 'js/tablero.js' %}"></script>
+<script type="module" src="{% static 'js/main.js' %}"></script>
 
-    {% endblock %}
+{% endblock %}

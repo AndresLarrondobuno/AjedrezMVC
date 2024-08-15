@@ -35,9 +35,18 @@ class AdministradorDeInterfazDeTablero {
 
     asignarImagenDePiezaACasilla(casilla) {
         if (casilla.pieza) {
-            let elementoImagen = document.getElementById(casilla.pieza.idContenedorImagen);
-            let clonImagen = elementoImagen.cloneNode();
+            let imagenPieza = document.getElementById(casilla.pieza.idContenedorImagen);
+            let clonImagen = imagenPieza.cloneNode();
             casilla.contenedor.appendChild(clonImagen);
+        }
+    }
+
+
+    quitarImagenDePiezaACasilla(casilla) {
+        if (casilla.pieza) {
+            let imagenPieza = casilla.contenedor.firstChild;
+            console.log("removiendo imagen: ", imagenPieza)
+            casilla.contenedor.removeChild(imagenPieza);
         }
     }
 
@@ -52,6 +61,13 @@ class AdministradorDeInterfazDeTablero {
 
         contenedorOverlay.appendChild(contenedorNomenclaturaColumna);
         contenedorNomenclaturaFila.textContent = `${casilla.columna}`;
+    }
+
+
+    resaltarCasillas(casillas) {
+        casillas.forEach(casilla => {
+            this.resaltarCasilla(casilla);
+        });
     }
 
 

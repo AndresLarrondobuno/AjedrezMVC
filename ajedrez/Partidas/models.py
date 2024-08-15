@@ -11,6 +11,9 @@ class Partida(models.Model):
 
     usuario_ganador = models.ForeignKey(PerfilUsuario, on_delete=models.CASCADE, null=True, related_name="partidas_ganadas")
     usuario_perdedor = models.ForeignKey(PerfilUsuario, on_delete=models.CASCADE, null=True, related_name="partidas_perdidas")
+    
+    color_usuario_solicitante = models.CharField(max_length=50)
+    color_usuario_destinatario = models.CharField(max_length=50)
 
 
 class Invitacion(models.Model):

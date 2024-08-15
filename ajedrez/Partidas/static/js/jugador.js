@@ -1,11 +1,13 @@
+import { obtenerColorDeUsuario } from "../../../static/js/funcionesAuxiliares.js";
+
 class Jugador {
     constructor(rol, color, tablero) {
         this._rol = rol;
         this._color = color;
-        if (color === 'blanco') {
+        if (this.color === 'blanco') {
             this._piezas = tablero.piezasBlancas;
         }
-        if (color === 'negro') {
+        else {
             this._piezas = tablero.piezasNegras;
         }
 
@@ -22,7 +24,9 @@ class Jugador {
     obtenerCasillasOcupadas() {
         let casillasOcupadas = [];
         this.piezas.forEach(pieza => {
-            casillasOcupadas.push(pieza.casilla);
+            if (pieza.enJuego) {
+                casillasOcupadas.push(pieza.casilla);
+            }
 
         });
         return casillasOcupadas;
@@ -30,6 +34,20 @@ class Jugador {
 
 
     moverPieza(jugada) {
+        console.log("moverPieza -> obj jugada: ", jugada);
+        let casillaDePartida = jugada.casillaDePartida;
+        let casillaAtacada = jugada.casillaAtacada;
+        let piezaAtacante = casillaDePartida.pieza;
+        let piezaAtacada = casillaAtacada.pieza ? casillaAtacada.pieza : null;
+
+        if (piezaAtacada) {
+            piezaAtacada.enJuego = false;
+            piezaAtacada.casilla = null;
+        }
+
+        casillaAtacada.pieza = piezaAtacante;
+        casillaDePartida.pieza = null;
+        piezaAtacante.casilla = casillaAtacada;
 
     }
 

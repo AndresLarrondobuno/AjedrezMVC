@@ -1,10 +1,12 @@
-import { partida } from "../main.js";
+import { partida, tablero, administradorDeElementosHTML } from "../main.js";
 import { administradorDeConexionWebsocket } from "./administradorDeConexionWebsocket.js";
 import { AdministradorDeInterfazDeChat } from "../administradorDeInterfazDeChat.js"
 import {
     obtenerRolDePartidaDeUsuario,
 } from "../../../../static/js/funcionesAuxiliares.js";
-import { AdministradorDeElementosHTML } from "../administradorDeElementosHTML.js";
+import { AdministradorDeEventosDePartida } from "../administradorDeEventosDePartida.js";
+import { ValidadorDeJugadas } from "../validadorDeJugadas.js";
+import { Jugada } from "../jugada.js";
 
 
 class AdministradorDeMensajesWebsocket {
@@ -12,6 +14,7 @@ class AdministradorDeMensajesWebsocket {
     static async enviarMensajeAConsumidor(websocket, mensaje) {
         websocket.send(JSON.stringify(mensaje));
     };
+
 
     static manejarMensajeWebsocketDeServidor(evento) {
 
@@ -22,12 +25,52 @@ class AdministradorDeMensajesWebsocket {
         }
 
         if (respuesta.type === 'conexion_establecida') {
-            console.log(respuesta);
+            console.log("conexion establecida con exito");
         }
-        if (respuesta.type === 'actualizacion_de_estado_de_partida') {
-            //objeto partida actualiza el estado del tablero: ejecutarJugada()
-            console.log(respuesta);
+        if (respuesta.type === 'validacion_de_jugada') {
+            let columnaCasillaDePartida = respuesta.message.jugada.columnaCasillaDePartida;
+            let filaCasillaDePartida = respuesta.message.jugada.filaCasillaDePartida;
+            let columnaCasillaAtacada = respuesta.message.jugada.columnaCasillaAtacada;
+            let filaCasillaAtacada = respuesta.message.jugada.filaCasillaAtacada;
+
+            let casillaDePartida = tablero.obtenerCasillaAPartirDeCoordenadas(columnaCasillaDePartida, filaCasillaDePartida);
+            let casillaAtacada = tablero.obtenerCasillaAPartirDeCoordenadas(columnaCasillaAtacada, filaCasillaAtacada);
+
+            let color = respuesta.message.color;
+            let jugador = partida.obtenerJugadorPorColor(color);
+
+            let jugada = new Jugada(jugador, casillaDePartida, casillaAtacada);
+            AdministradorDeEventosDePartida.ejecutarJugada(jugada);
         }
+    }
+
+
+    static async notificarJugada(event, jugador, casillaDePartida) {
+        console.log("notificarJugada()");
+        let idPartida = partida.id;
+        let rolUsuario = obtenerRolDePartidaDeUsuario();
+        console.log("-casillaAtacada: ", event.currentTarget);
+        console.log("-event: ", event);
+
+        let casillaAtacada = event.currentTarget.casilla;
+        
+        let datos = {
+            "message":
+            {
+                "idPartida": idPartida,
+                "rolUsuario": rolUsuario,
+                "color": jugador.color,
+                "jugada": {
+                    "columnaCasillaDePartida": casillaDePartida.columna,
+                    "filaCasillaDePartida": casillaDePartida.fila,
+                    "columnaCasillaAtacada": casillaAtacada.columna,
+                    "filaCasillaAtacada": casillaAtacada.fila,
+                }
+            },
+            "type": "validacion_de_jugada",
+        }
+
+        await AdministradorDeMensajesWebsocket.enviarMensajeAConsumidor(administradorDeConexionWebsocket.websocket, datos);
     }
 
 
@@ -57,7 +100,7 @@ class AdministradorDeMensajesWebsocket {
 
 }
 
-AdministradorDeElementosHTML.agregarListenerAFormularioParaEnvioDeMensajesWebsocketAServidor();
+administradorDeElementosHTML.agregarListenerAFormularioParaEnvioDeMensajesWebsocketAServidor();
 administradorDeConexionWebsocket.websocket.onmessage = AdministradorDeMensajesWebsocket.manejarMensajeWebsocketDeServidor;
 
 export { AdministradorDeMensajesWebsocket };

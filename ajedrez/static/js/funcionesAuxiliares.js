@@ -50,6 +50,21 @@ function obtenerRolDePartidaDeUsuario() {
     return document.getElementById("datosPartida").dataset.rolUsuario;
 }
 
+function obtenerRolDePartidaDeUsuarioOponente() {
+    let rolUsuario = obtenerRolDePartidaDeUsuario();
+    if (rolUsuario === 'solicitante') {
+        return 'destinatario';
+    }
+    else {
+        return 'solicitante';
+    }
+
+}
+
+function obtenerColorDeUsuario() {
+    return document.getElementById("datosPartida").dataset.colorUsuarioActual;
+}
+
 async function agregarOpcionesASelectAPartirDeResultadosDeBusqueda(elementoSelect, resultados) {
     for (let i = 0; i < resultados.length; i++) {
         let opcion = document.createElement("option");
@@ -60,6 +75,20 @@ async function agregarOpcionesASelectAPartirDeResultadosDeBusqueda(elementoSelec
 
 async function eliminarElementosHijos(elementoHTML) {
     elementoHTML.innerHTML = '';
+}
+
+
+const randomizarArray = (array) => {
+    let array2 = [...array];
+    return array2.map((a) => ({ sort: Math.random(), value: a }))
+        .sort((a, b) => a.sort - b.sort)
+        .map((a) => a.value);
+};
+
+
+function obtenerBooleanoAleatorio() {
+    // Math.random() genera un número aleatorio entre 0 (inclusive) y 1 (exclusivo)
+    return Math.random() < 0.5;
 }
 
 const csrftoken = getCookie('csrftoken');
@@ -75,4 +104,8 @@ export {
     agregarOpcionesASelectAPartirDeResultadosDeBusqueda,
     eliminarElementosHijos,
     obtenerRolDePartidaDeUsuario,
+    obtenerRolDePartidaDeUsuarioOponente,
+    obtenerColorDeUsuario,
+    randomizarArray,
+    obtenerBooleanoAleatorio,
 };

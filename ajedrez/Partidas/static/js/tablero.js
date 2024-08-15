@@ -18,12 +18,24 @@ class Tablero {
     get piezasBlancas() { return this._piezasBlancas }
     get piezasNegras() { return this._piezasNegras }
 
-    //crea las 64 casillas del tablero
+
+    obtenerCasillaAPartirDeCoordenadas(columna, fila) {
+        let casillaEncontrada = null;
+        this.casillas.forEach(casilla => {
+            if (casilla.columna === columna && casilla.fila === fila) {
+                casillaEncontrada = casilla;
+            }
+        });
+        return casillaEncontrada;
+    }
+
+
+    //crea las 64 casillas del tablero de izq a dcha y de abajo hacia arriba
     crearCasillas() {
         let casillas = [];
         rango(1, 8).forEach(fila => {
             rango(1, 8).forEach(columna => {
-                var casilla = new Casilla(fila, columna);
+                var casilla = new Casilla(columna, fila);
                 casillas.push(casilla);
             });
         });
@@ -56,6 +68,8 @@ class Tablero {
             }
         });
     }
+
+
 
 }
 

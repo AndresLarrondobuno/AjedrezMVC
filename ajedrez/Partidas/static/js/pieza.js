@@ -10,6 +10,7 @@ class Pieza {
         
         this._idContenedorImagen = null;
         this._seleccionada = false;
+        this._enJuego = true;
     }
 
     get casilla() { return this._casilla }
@@ -18,7 +19,11 @@ class Pieza {
     get columna() { return this._columna }
     get idContenedorImagen() { return this._idContenedorImagen }
     get seleccionada() { return this._seleccionada }
+    get enJuego() { return this._enJuego }
+    set enJuego(bool) { return this._enJuego = bool }
+    set casilla(casilla) { return this._casilla = casilla }
 
+    respetaPatronDeMovimiento(jugada) {}
 }
 
 
@@ -26,6 +31,10 @@ class Rey extends Pieza {
     constructor(tipo, color, casilla) {
         super(tipo, color, casilla);
         this._idContenedorImagen = `imagenRey${primeraLetraMayuscula(color)}`;
+    }
+
+    respetaPatronDeMovimiento(jugada) {
+
     }
 
 }
@@ -37,6 +46,12 @@ class Reina extends Pieza {
         this._idContenedorImagen = `imagenReina${primeraLetraMayuscula(color)}`;
     }
 
+
+    respetaPatronDeMovimiento(jugada) {
+
+    }
+
+
 }
 
 
@@ -45,6 +60,12 @@ class Torre extends Pieza {
         super(tipo, color, casilla);
         this._idContenedorImagen = `imagenTorre${primeraLetraMayuscula(color)}`;
     }
+
+
+    respetaPatronDeMovimiento(jugada) {
+
+    }
+
 
 }
 
@@ -55,6 +76,12 @@ class Caballo extends Pieza {
         this._idContenedorImagen = `imagenCaballo${primeraLetraMayuscula(color)}`;
     }
 
+
+    respetaPatronDeMovimiento(jugada) {
+
+    }
+
+
 }
 
 
@@ -64,6 +91,12 @@ class Alfil extends Pieza {
         this._idContenedorImagen = `imagenAlfil${primeraLetraMayuscula(color)}`;
     }
 
+
+    respetaPatronDeMovimiento(jugada) {
+
+    }
+
+
 }
 
 
@@ -72,6 +105,17 @@ class Peon extends Pieza {
         super(tipo, color, casilla);
         this._idContenedorImagen = `imagenPeon${primeraLetraMayuscula(color)}`;
     }
+
+
+    respetaPatronDeMovimiento(jugada) {
+
+    }
+
+
+    respetaPatronDeAtaque(jugada) {
+
+    }
+
 
 }
 
