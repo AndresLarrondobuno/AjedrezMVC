@@ -10,6 +10,8 @@ class Tablero {
         this.agregarPiezas();
         this.agregarPiezasBlancas();
         this.agregarPiezasNegras();
+        this._filaDePromocionDeBlancas = this.obtenerFila(8);
+        this._filaDePromocionDeNegras = this.obtenerFila(1);
     }
 
 
@@ -17,6 +19,8 @@ class Tablero {
     get piezas() { return this._piezas }
     get piezasBlancas() { return this._piezasBlancas }
     get piezasNegras() { return this._piezasNegras }
+    get filaDePromocionDeBlancas() { return this._filaDePromocionDeBlancas }
+    get filaDePromocionDeNegras() { return this._filaDePromocionDeNegras }
 
 
     obtenerCasillaAPartirDeCoordenadas(columna, fila) {
@@ -30,7 +34,6 @@ class Tablero {
     }
 
 
-    //crea las 64 casillas del tablero de izq a dcha y de abajo hacia arriba
     crearCasillas() {
         let casillas = [];
         rango(1, 8).forEach(fila => {
@@ -70,6 +73,69 @@ class Tablero {
     }
 
 
+    obtenerFila(numeroDeFila) {
+        let fila = [];
+        this.casillas.forEach(casilla => {
+            if (casilla.fila === numeroDeFila) {
+                fila.push(casilla);
+            }
+        });
+        return fila;
+    }
+
+
+    obtenerColumna(numeroDeColumna) {
+        let columna = [];
+        this.casillas.forEach(casilla => {
+            if (casilla.columna === numeroDeColumna) {
+                columna.push(casilla);
+            }
+        });
+        return columna;
+    }
+
+
+    obtenerDiagonales(numeroDeColumna, numeroDeFila) {
+        let casillaDeComparacion = obtenerCasillaAPartirDeCoordenadas(numeroDeColumna, numeroDeFila);
+        let diagonal = [];
+        this.casillas.forEach(casilla => {
+            if (casilla.comparteDiagonalCon(casillaDeComparacion)) {
+                diagonal.push(casilla);
+            }
+        });
+        return diagonal;
+    }
+
+
+    obtenerDiagonal(casilla1, casilla2) {
+        let diagonal = [];
+        this.casillas.forEach(casilla => {
+            if (casilla.comparteDiagonalCon(casilla1) && (casilla.comparteDiagonalCon(casilla2))) {
+                diagonal.push(casilla);
+            }
+        });
+        return diagonal;
+    }
+
+
+    deshacerJugada(jugada) {
+        let casillaDePartida = jugada.casillaDePartida;
+        let casillaAtacada = jugada.casillaAtacada;
+        let piezaAtacante = jugada.piezaAtacante;
+        let piezaAtacada = jugada.piezaAtacada;
+
+        if (piezaAtacada) {
+            piezaAtacada.enJuego = true;
+            piezaAtacada.casilla = casillaAtacada;
+        }
+
+        casillaAtacada.pieza = piezaAtacada;
+        casillaDePartida.pieza = piezaAtacante;
+
+        piezaAtacante.casilla = casillaDePartida;
+        piezaAtacante.columna = casillaDePartida.columna;
+        piezaAtacante.fila = casillaDePartida.fila;
+    }
 
 }
 

@@ -1,24 +1,26 @@
-import { tablero, partida } from "./main.js";
+import { tablero } from "./main.js";
+import { ValidadorDeJugadas } from "./validadorDeJugadas.js";
 
 class Jugada {
     constructor(jugador, casillaDePartida, casillaAtacada) {
         this._casillaDePartida = casillaDePartida;
         this._casillaAtacada = casillaAtacada;
         this._piezaAtacante = casillaDePartida.pieza;
+        this._piezaAtacada = casillaAtacada.pieza ? casillaAtacada.pieza : null;
         this._eje = this.obtenerEjeDeMovimiento();
-        this._direccion = this.obtenerDireccionDeMovimiento();
-        this._ruta = this.obtenerRutaDeMovimiento();
+        this._direccion = this._eje ? this.obtenerDireccionDeMovimiento() : null;
+        this._ruta = this._eje ? this.obtenerRutaDeMovimiento() : [];
         this._jugador = jugador;
-        console.log("ruta: ", this.ruta);
     }
 
     get casillaDePartida() { return this._casillaDePartida }
     get casillaAtacada() { return this._casillaAtacada }
-    get piezaAtacante() { return this._piezaAtacante }
     get eje() { return this._eje }
     get direccion() { return this._direccion }
     get ruta() { return this._ruta }
     get jugador() { return this._jugador }
+    get piezaAtacante() { return this._piezaAtacante }
+    get piezaAtacada() { return this._piezaAtacada }
 
 
     obtenerEjeDeMovimiento() {
@@ -69,95 +71,76 @@ class Jugada {
 
 
     obtenerRutaDeMovimiento() {
-        if (this.eje === 'horizontal') {
-            var casillas = this.obtenerFila();
+        let casillas = []
+        switch (this.eje) {
+            case ('horizontal'):
+                casillas = tablero.obtenerFila(this.casillaDePartida.fila);
+                break;
+            case ('vertical'):
+                casillas = tablero.obtenerColumna(this.casillaDePartida.columna);
+                break;
+            case ('diagonal'):
+                casillas = tablero.obtenerDiagonal(this.casillaDePartida, this.casillaAtacada);
+                break;
+            default:
+                casillas = [];
         }
-        if (this.eje === 'vertical') {
-            var casillas = this.obtenerColumna();
-        }
-        if (this.eje === 'diagonal') {
-            var casillas = this.obtenerDiagonal();
-        }
-        console.log("casillas para ordenamiento: ", casillas);
 
         let casillasOrdenadas = this.ordenarCasillas(casillas, this);
 
         let indiceDeCasillaDePartida = casillasOrdenadas.indexOf(this.casillaDePartida);
         let indiceDeCasillaAtacada = casillasOrdenadas.indexOf(this.casillaAtacada);
 
-        let ruta = casillasOrdenadas.slice(indiceDeCasillaDePartida + 1, indiceDeCasillaAtacada);
+        let ruta;
+        ruta = casillasOrdenadas.slice(indiceDeCasillaDePartida + 1, indiceDeCasillaAtacada);
+  
         return ruta;
     }
 
-    ordenarCasillas(arrayCasillas, jugada) {
-        let copiaArrayCasillas = [...arrayCasillas];
-        let direccionHorizontal = jugada.direccion['direccionHorizontal'];
-        let direccionVertical = jugada.direccion['direccionVertical'];
 
-        if (direccionHorizontal === true && direccionVertical === null) {
-            var arrayOrdenado = copiaArrayCasillas.sort((a, b) => {
-                return a.columna - b.columna; // derecha
-            });
-        }
-        if (direccionHorizontal === false && direccionVertical === null) {
-            var arrayOrdenado = copiaArrayCasillas.sort((a, b) => {
-                return b.columna - a.columna; // izquierda
-            });
-        }
-        if (direccionHorizontal === null && direccionVertical === true) {
-            var arrayOrdenado = copiaArrayCasillas.sort((a, b) => {
-                return a.fila - b.fila; // arriba
-            });
-        }
-        if (direccionHorizontal === null && direccionVertical === false) {
-            var arrayOrdenado = copiaArrayCasillas.sort((a, b) => {
-                return b.fila - a.fila; // abajo
-            });
-        }
-        if (direccionHorizontal !== null && direccionVertical !== null) {
-            const signo = direccionHorizontal ? 1 : -1;
+    ordenarCasillas(arrayCasillas) {
+        const { direccionHorizontal, direccionVertical } = this.direccion;
 
-            var arrayOrdenado = copiaArrayCasillas.sort((a, b) => {
-                const pendienteA = a.fila / a.columna;
-                const pendienteB = b.fila / b.columna;
+            let esDiagonalPrincipal;
+            let esDiagonalAscendente;
 
-                return signo * (pendienteA - pendienteB);
-            });
+            if (direccionHorizontal === direccionVertical) { esDiagonalPrincipal = true }
+            else { esDiagonalPrincipal = false }
+
+            if (direccionHorizontal === true) { esDiagonalAscendente = true }
+            else { esDiagonalAscendente = false }
+
+
+
+        return [...arrayCasillas].sort((a, b) => {
+            if (direccionHorizontal !== null && direccionVertical === null) {
+                return direccionHorizontal ? a.columna - b.columna : b.columna - a.columna;
+            } else if (direccionHorizontal === null && direccionVertical !== null) {
+                return direccionVertical ? a.fila - b.fila : b.fila - a.fila;
+            } else {
+
+            if (esDiagonalPrincipal && esDiagonalAscendente) {
+                return a.fila - b.fila; // Diagonal principal ascendente
+            } else if (esDiagonalPrincipal && !esDiagonalAscendente) {
+                return b.fila - a.fila; // Diagonal principal descendente
+            } else if (!esDiagonalPrincipal && esDiagonalAscendente) {
+                return b.fila - a.fila; // Diagonal secundaria ascendente
+            } else {
+                return a.fila - b.fila; // Diagonal secundaria descendente
+            }
         }
-        return arrayOrdenado;
+    });
     }
 
 
-    obtenerFila() {
-        let fila = [];
-        tablero.casillas.forEach(casilla => {
-            if (casilla.comparteFilaCon(this.casillaDePartida)) {
-                fila.push(casilla);
+    poseePiezaEnRutaDeMovimiento() {
+        let piezaInterrumpeMovimiento = false;
+        this.ruta.forEach(casilla => {
+            if (casilla.pieza) {
+                piezaInterrumpeMovimiento = true;
             }
         });
-        return fila;
-    }
-
-
-    obtenerColumna() {
-        let columna = [];
-        tablero.casillas.forEach(casilla => {
-            if (casilla.comparteColumnaCon(this.casillaDePartida)) {
-                columna.push(casilla);
-            }
-        });
-        return columna;
-    }
-
-
-    obtenerDiagonal() {
-        let diagonal = [];
-        tablero.casillas.forEach(casilla => {
-            if (casilla.comparteDiagonalCon(this.casillaDePartida) && (casilla.comparteDiagonalCon(this.casillaAtacada))) {
-                diagonal.push(casilla);
-            }
-        });
-        return diagonal;
+        return piezaInterrumpeMovimiento;
     }
 
 }

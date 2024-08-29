@@ -13,8 +13,6 @@ async function buscarUsuarioPorSubstring() {
     const respuesta = await fetch(url);
     const resultados = await respuesta.json();
 
-    console.log(resultados);
-
     if (!resultados.ok) {
         await eliminarElementosHijos(elementoSelect);
         await agregarOpcionesASelectAPartirDeResultadosDeBusqueda(elementoSelect, resultados);

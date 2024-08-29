@@ -1,5 +1,4 @@
 import { obtenerIdDePartida, obtenerRolDePartidaDeUsuario } from "../../../static/js/funcionesAuxiliares.js";
-import { administradorDeElementosHTML } from "./main.js";
 
 class Partida {
     constructor(jugadorSolicitante, jugadorDestinatario) {
@@ -10,13 +9,14 @@ class Partida {
         this._turnoActual = 1;
         this._id = obtenerIdDePartida();
         this._rolUsuarioAsociadoACliente = obtenerRolDePartidaDeUsuario();
+        this._jugadas = {};
     }
-
 
     get id() { return this._id }
     get turnoActual() { return this._turnoActual }
     get jugadores() { return this._jugadores }
     get rolUsuarioAsociadoACliente() { return this._rolUsuarioAsociadoACliente }
+    get jugadas() { return this._jugadas }
 
 
     obtenerJugadorPorRol(rol) {
@@ -56,7 +56,7 @@ class Partida {
 
 
     obtenerJugadorPorColor(color) {
-        if (this.jugadores['jugadorSolicitante'].color === color)  {
+        if (this.jugadores['jugadorSolicitante'].color === color) {
             return this.jugadores['jugadorSolicitante']
         }
         else {
@@ -70,6 +70,28 @@ class Partida {
     }
 
 
+    guardarJugada(jugada) {
+        if (!(this._turnoActual in this._jugadas)) {
+            this._jugadas[this._turnoActual] = jugada;
+        }
+    }
+
+
+    piezaFueMovida(pieza) {
+        let piezaFueMovida = false;
+        for (const turno in this.jugadas) {
+            let jugada = this.jugadas[turno];
+            if (jugada.piezaAtacante === pieza) {
+                piezaFueMovida = true;
+            }
+        };
+        return piezaFueMovida;
+    }
+
+
+    obtenerTurnoAnterior() {
+        return this.jugadas[this.turnoActual - 1];
+    }
 }
 
 export { Partida }

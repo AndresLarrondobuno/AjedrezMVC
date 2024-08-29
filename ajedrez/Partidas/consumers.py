@@ -89,6 +89,24 @@ class PartidasConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json_contexto)
         
         
+    async def finalizacion_de_partida(self, contexto):
+        motivo = contexto['message']['motivo']
+        color_ganador = contexto['message']['color_ganador'] if (motivo == 'mate') else None
+        color_perdedor = contexto['message']['color_perdedor'] if (motivo == 'mate') else None
+        print(f"metodo finalizacion_de_partida ejecutado, consumidor asociado a: {self.scope['user']}")
+
+        json_contexto = json.dumps({
+            'message': {
+                "motivo": motivo,
+                "color_ganador": color_ganador,
+                "color_perdedor": color_perdedor,
+                },
+            'type':'finalizacion_de_partida',
+        })
+
+        await self.send(text_data=json_contexto)
+        
+        
     
     
     

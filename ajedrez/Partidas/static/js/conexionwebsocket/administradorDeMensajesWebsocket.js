@@ -5,13 +5,13 @@ import {
     obtenerRolDePartidaDeUsuario,
 } from "../../../../static/js/funcionesAuxiliares.js";
 import { AdministradorDeEventosDePartida } from "../administradorDeEventosDePartida.js";
-import { ValidadorDeJugadas } from "../validadorDeJugadas.js";
 import { Jugada } from "../jugada.js";
 
 
 class AdministradorDeMensajesWebsocket {
 
     static async enviarMensajeAConsumidor(websocket, mensaje) {
+        console.log("mensaje websocket: ", mensaje);
         websocket.send(JSON.stringify(mensaje));
     };
 
@@ -42,18 +42,25 @@ class AdministradorDeMensajesWebsocket {
             let jugada = new Jugada(jugador, casillaDePartida, casillaAtacada);
             AdministradorDeEventosDePartida.ejecutarJugada(jugada);
         }
+        if (respuesta.type === 'finalizacion_de_partida') {
+            //guardar partida
+            let motivo = respuesta.message.motivo;
+            console.log("partida finalizada por: ", respuesta.message.motivo);
+            if (motivo === "mate")
+                console.log("ganador / perdedor: ", respuesta.message.color_ganador, " / ", respuesta.message.color_perdedor);
+            else {
+                console.log(`La partida terminó en empate por ${motivo}`)
+            }
+        }
     }
 
 
     static async notificarJugada(event, jugador, casillaDePartida) {
-        console.log("notificarJugada()");
         let idPartida = partida.id;
         let rolUsuario = obtenerRolDePartidaDeUsuario();
-        console.log("-casillaAtacada: ", event.currentTarget);
-        console.log("-event: ", event);
 
         let casillaAtacada = event.currentTarget.casilla;
-        
+
         let datos = {
             "message":
             {
@@ -74,6 +81,32 @@ class AdministradorDeMensajesWebsocket {
     }
 
 
+    static async notificarFinalDePartida(motivo, ganador, perdedor) {
+        let mensaje = {
+            "message": {
+                "motivo": motivo,
+            },
+            "type": "finalizacion_de_partida",
+        };
+
+        switch (motivo) {
+            case "mate":
+                mensaje["message"]['resultado'] = `$victoria_${ganador.color}`;
+                mensaje["message"]['color_ganador'] = ganador.color;
+                mensaje["message"]['color_perdedor'] = perdedor.color;
+                break;
+            case "ahogado":
+            case "repeticion":
+                mensaje["message"]['resultado'] = 'empate';
+                break;
+            default:
+                console.log("Error notificando el final de partida al servidor.")
+        }
+
+        AdministradorDeMensajesWebsocket.enviarMensajeAConsumidor(administradorDeConexionWebsocket.websocket, mensaje);
+    }
+
+
     static manejarMensajeDeUsuario(respuesta) {
         let mensaje = respuesta.message;
         AdministradorDeInterfazDeChat.imprimirMensajeDeUsuario(mensaje);
@@ -82,7 +115,6 @@ class AdministradorDeMensajesWebsocket {
 
     static enviarMensajeDeUsuario(event) {
         event.preventDefault();
-        console.log("enviarMensajeDeUsuario() ejecutado desde AdministradorDeMensajesWebsocket");
 
         let mensaje = event.target.contenido.value;
         let username = event.target.dataset.username;

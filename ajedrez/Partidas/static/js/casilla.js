@@ -1,3 +1,4 @@
+import { partida } from "./main.js";
 import { PiezaFactory } from "./piezaFactory.js";
 
 class Casilla {
@@ -5,7 +6,7 @@ class Casilla {
         this._columna = columna;
         this._fila = fila;
         this._pieza = PiezaFactory.crearPiezaAPartirDeCasilla(this);
-        this._coordenadas = {"columna": columna, "fila": fila};
+        this._coordenadas = { "columna": columna, "fila": fila };
         this._contenedor = null;
 
         this._x = columna;
@@ -26,77 +27,96 @@ class Casilla {
 
 
     distanciaHorizontal(casilla) {
-        return Math.abs(this.columna - casilla.columna)
+        return Math.abs(this.columna - casilla.columna);
     }
 
 
     distanciaVertical(casilla) {
-        return Math.abs(this.fila - casilla.fila)
+        return Math.abs(this.fila - casilla.fila);
     }
 
 
     distanciaOrtogonal(casilla) {
-        return this.distanciaHorizontal(casilla) + this.distanciaVertical(casilla)
+        return this.distanciaHorizontal(casilla) + this.distanciaVertical(casilla);
     }
 
 
     comparteFilaCon(casilla) {
         if (this.fila === casilla.fila) {
-            return true
+            return true;
         }
         else {
-            return false
+            return false;
         }
     }
 
 
     comparteColumnaCon(casilla) {
         if (this.columna === casilla.columna) {
-            return true
+            return true;
         }
         else {
-            return false
+            return false;
         }
     }
 
 
     comparteDiagonalCon(casilla) {
         if (Math.abs(this.columna - casilla.columna) === Math.abs(this.fila - casilla.fila)) {
-            return true
+            return true;
         }
         else {
-            return false
+            return false;
         }
     }
 
 
     comparteDiagonalPrincipalCon(casilla) {
         if ((this.columna - casilla.columna) === (this.fila - casilla.fila)) {
-            return true
+            return true;
         }
         else {
-            return false
+            return false;
         }
     }
 
 
     comparteDiagonalSecundariaCon(casilla) {
         if (Math.abs(this.columna - casilla.columna) === Math.abs(this.fila - casilla.fila)) {
-            return true
+            return true;
         }
         else {
-            return false
+            return false;
         }
     }
 
 
     ortogonalCon(casilla) {
         if (this.comparteFilaCon(casilla) || this.comparteColumnaCon(casilla)) {
-            return true
+            return true;
         }
-        else{
-            return false
+        else {
+            return false;
         }
+    }
+
+
+    bajoAtaque(jugadorAtacado) {
+        let oponente = partida.obtenerOponente(jugadorAtacado);
+        let piezasEnemigas = oponente.obtenerPiezasEnJuego();
+        let bajoAtaque = false;
+        let piezasAtacantes = [];
+
+        piezasEnemigas.forEach(pieza => {
+            let casillasAtacadas = pieza.casillasAtacadas();
+            casillasAtacadas.forEach(casilla => {
+                if (casilla === this) {
+                    bajoAtaque = true;
+                    piezasAtacantes.push(pieza);
+                }
+            });
+        });
+        return { "bajoAtaque": bajoAtaque, "piezasAtacantes": piezasAtacantes };
     }
 
 }
